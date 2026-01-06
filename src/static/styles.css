@@ -44,7 +44,7 @@ body.dark-mode {
   --secondary: #ff9800;
   --secondary-light: #ffa726;
   --secondary-dark: #f57c00;
-  --secondary-text: #000000;
+  --secondary-text: #ffffff;
 
   /* Neutral colors - inverted for dark mode */
   --background: #1a1a1a;
