@@ -621,6 +621,12 @@ document.addEventListener("DOMContentLoaded", () => {
     
     shareToggle.addEventListener("click", (e) => {
       e.stopPropagation();
+      // Close all other share menus before toggling this one
+      document.querySelectorAll(".share-options").forEach(el => {
+        if (el !== shareOptions) {
+          el.classList.add("hidden");
+        }
+      });
       shareOptions.classList.toggle("hidden");
     });
 
@@ -631,11 +637,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const shareEmail = activityCard.querySelector(".share-email");
     const shareCopy = activityCard.querySelector(".share-copy");
 
-    shareTwitter.addEventListener("click", () => handleShare(name, details, "twitter"));
-    shareFacebook.addEventListener("click", () => handleShare(name, details, "facebook"));
-    shareLinkedIn.addEventListener("click", () => handleShare(name, details, "linkedin"));
-    shareEmail.addEventListener("click", () => handleShare(name, details, "email"));
-    shareCopy.addEventListener("click", () => handleShare(name, details, "copy"));
+    shareTwitter.addEventListener("click", (e) => handleShare(name, details, "twitter", e));
+    shareFacebook.addEventListener("click", (e) => handleShare(name, details, "facebook", e));
+    shareLinkedIn.addEventListener("click", (e) => handleShare(name, details, "linkedin", e));
+    shareEmail.addEventListener("click", (e) => handleShare(name, details, "email", e));
+    shareCopy.addEventListener("click", (e) => handleShare(name, details, "copy", e));
 
     activitiesList.appendChild(activityCard);
   }
@@ -803,7 +809,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Handle social sharing
-  function handleShare(activityName, details, platform) {
+  function handleShare(activityName, details, platform, event) {
     // Create share URL and message
     const currentUrl = window.location.origin + window.location.pathname;
     const shareUrl = `${currentUrl}#${encodeURIComponent(activityName)}`;
@@ -868,8 +874,13 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
     
-    // Close the share options menu
-    document.querySelectorAll(".share-options").forEach(el => el.classList.add("hidden"));
+    // Close the specific share options menu
+    if (event) {
+      const shareOptions = event.target.closest(".share-buttons").querySelector(".share-options");
+      if (shareOptions) {
+        shareOptions.classList.add("hidden");
+      }
+    }
   }
 
   // Close share options when clicking outside
