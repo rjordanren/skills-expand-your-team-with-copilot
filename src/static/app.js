@@ -811,6 +811,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle social sharing
   function handleShare(activityName, details, platform, event) {
     // Create share URL and message
+    // Using fragment identifier for activity reference as a simple client-side solution
+    // This works well for sharing and allows users to navigate to the specific activity
     const currentUrl = window.location.origin + window.location.pathname;
     const shareUrl = `${currentUrl}#${encodeURIComponent(activityName)}`;
     const shareTitle = `Join ${activityName} at Mergington High School!`;
@@ -858,8 +860,12 @@ document.addEventListener("DOMContentLoaded", () => {
           // Fallback for older browsers
           const textArea = document.createElement("textarea");
           textArea.value = shareUrl;
+          // Set all style properties before appending to prevent visibility
           textArea.style.position = "fixed";
           textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          textArea.style.opacity = "0";
+          textArea.setAttribute("readonly", "");
           document.body.appendChild(textArea);
           textArea.select();
           try {
@@ -883,7 +889,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Close share options when clicking outside
+  // Global click handler to close share options when clicking outside
+  // This is registered once on page load, not per activity card
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".share-buttons")) {
       document.querySelectorAll(".share-options").forEach(el => el.classList.add("hidden"));
